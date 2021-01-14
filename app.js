@@ -13,6 +13,7 @@ class DrumKit {
         this.isPlaying = null;
         this.selects = document.querySelectorAll('select');
         this.muteBtns = document.querySelectorAll('.mute');
+        this.tempoSlider = document.querySelector('.tempo-slider');
     }
 
     activePad() {
@@ -71,8 +72,7 @@ class DrumKit {
         switch (selectionName) {
             case 'kick-select':
                 this.kickAudio.src = selectionValue;
-                break;
-            case 'snare-select':
+                break; button
                 this.snareAudio.src = selectionValue;
                 break;
             case 'hihat-select':
@@ -110,6 +110,21 @@ class DrumKit {
             }
         }
     }
+
+    changeTempo(event) {
+        const tempoText = document.querySelector('.tempo-nr');
+        tempoText.innerText = event.target.value;
+    }
+
+    updateTempo(event) {
+        this.bpm = event.target.value;
+        clearInterval(this.isPlaying);
+        this.isPlaying = null;
+        const playBtn = document.querySelector('.play');
+        if (playBtn.classList.contains('active')) {
+            this.start();
+        }
+    }
 }
 
 const drumkit = new DrumKit();
@@ -138,4 +153,12 @@ drumkit.muteBtns.forEach(btn => {
     btn.addEventListener('click', function (event) {
         drumkit.mute(event);
     });
+});
+
+drumkit.tempoSlider.addEventListener('input', function (event) {
+    drumkit.changeTempo(event);
+});
+
+drumkit.tempoSlider.addEventListener('change', function (event) {
+    drumkit.updateTempo(event);
 });
